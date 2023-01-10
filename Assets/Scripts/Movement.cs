@@ -9,6 +9,8 @@ public class Movement : MonoBehaviour
     Rigidbody rb;
     //To cache by how much I want to change how much force is being applied every frame to the upward movement.
     [SerializeField] float mainThrust = 100f;
+    //And for the rotation movement.
+    [SerializeField] float rotationThrust = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -38,9 +40,12 @@ public class Movement : MonoBehaviour
 
     void ProcessRotation(){
         if(Input.GetKey(KeyCode.A)){
-
+            //I am reaching for the object's 'transform' property within Unity. The object is whatever the script is assigned to.
+            //'Vector3.forward' means '0, 0, 1'.
+            transform.Rotate(Vector3.forward * rotationThrust * Time.deltaTime);
         } else if(Input.GetKey(KeyCode.D)){
-
+            //The other direction is basically the same, but negative.
+            transform.Rotate(-Vector3.forward * rotationThrust * Time.deltaTime);
         }
     }
 }
