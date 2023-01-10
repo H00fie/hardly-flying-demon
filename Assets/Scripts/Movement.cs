@@ -34,18 +34,25 @@ public class Movement : MonoBehaviour
             //speed a thing is going.
             //'Vector3' is the same as saying '1, 1, 1', e.g. 'Vector3.up' means '0, 1, 0'. 'mainThrust' is there so I can change
             //the dafult value of force applied. 'Time.deltaTime' is to make it framerate independent.
-            rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+            rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime * 10);
+            //The value is additionally multiplied because there was no movement without it.
         }
     }
 
     void ProcessRotation(){
         if(Input.GetKey(KeyCode.A)){
-            //I am reaching for the object's 'transform' property within Unity. The object is whatever the script is assigned to.
-            //'Vector3.forward' means '0, 0, 1'.
-            transform.Rotate(Vector3.forward * rotationThrust * Time.deltaTime);
+            ApplyRotation(rotationThrust);
         } else if(Input.GetKey(KeyCode.D)){
             //The other direction is basically the same, but negative.
-            transform.Rotate(-Vector3.forward * rotationThrust * Time.deltaTime);
+            ApplyRotation(-rotationThrust);
         }
+    }
+
+    //In C# all methods are private by default.
+    private void ApplyRotation(float rotationThisFrame){
+        //I am reaching for the object's 'transform' property within Unity. The object is whatever the script is assigned to.
+        //'Vector3.forward' means '0, 0, 1'.
+        transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime * 100);
+        //The value is additionally multiplied because there was no movement without it.
     }
 }
