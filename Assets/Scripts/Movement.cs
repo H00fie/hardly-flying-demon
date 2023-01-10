@@ -50,9 +50,15 @@ public class Movement : MonoBehaviour
 
     //In C# all methods are private by default.
     private void ApplyRotation(float rotationThisFrame){
+        //The physics system in Unity reacts with objects on impact which can cause conflicts with player controlled movement. In
+        //practice it can make my demon fail to react to player's commands when bumping into other game objects. In order to
+        //prevent it, I need to freeze the physics system rotation. The mechanism below will prevent the physics system from
+        //having on impact on my demon if it's being issued a command to rotate.
+        rb.freezeRotation = true;
         //I am reaching for the object's 'transform' property within Unity. The object is whatever the script is assigned to.
         //'Vector3.forward' means '0, 0, 1'.
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.deltaTime * 100);
         //The value is additionally multiplied because there was no movement without it.
+        rb.freezeRotation = false;
     }
 }
