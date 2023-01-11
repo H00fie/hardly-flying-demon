@@ -7,6 +7,8 @@ public class Movement : MonoBehaviour
 {
     //To store the rigidbody of my demon.
     Rigidbody rb;
+    //To store the audio source for my demon.
+    AudioSource audioSource;
     //To cache by how much I want to change how much force is being applied every frame to the upward movement.
     [SerializeField] float mainThrust = 100f;
     //And for the rotation movement.
@@ -17,6 +19,8 @@ public class Movement : MonoBehaviour
     {
         //To cache the rigidbody of the demon within my variable.
         rb = GetComponent<Rigidbody>();
+        //To cache a reference to my audio source.
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -36,6 +40,15 @@ public class Movement : MonoBehaviour
             //the dafult value of force applied. 'Time.deltaTime' is to make it framerate independent.
             rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime * 10);
             //The value is additionally multiplied because there was no movement without it.
+            //Since there is only one audio source on my component and there is only one clip on that audio source, I don't need
+            //to specify what the clip is. The 'if' ensures that the clip be only played once at a time, without it, it would be
+            //triggered multiple times and they would overlap.
+            if(!audioSource.isPlaying){
+                audioSource.Play();
+            }
+        } else {
+            //If the 'space' is not pressed, don't play the audio.
+            audioSource.Stop();
         }
     }
 
