@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//'UnityEngine.SceneManagement' is required for me to use the methods of the SceneManager class.
+using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
@@ -19,8 +21,19 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("You have harvested a soul!");
                 break;
             default:
-                Debug.Log("You've failed!");
+                ReloadLevel();
                 break;
         }    
+    }
+
+    void ReloadLevel()
+    {
+        //I need to specify what level/scene I want to reload. I can check the index of the
+        //level in Unity -> File -> Build Settings -> Scenes In Build. To begin with, it was
+        //empty and I added my sandbox (the "main" scene) there by pressing the 'Add Open Scenes'
+        //button but simply dragging it from the Scenes catalog would do the trick as well.
+        //I can either provide the index which would allow me to refer to different levels
+        //(e.g. '0 + 1') or I can provide the name of the scene as a string.
+        SceneManager.LoadScene(0);
     }
 }
