@@ -34,6 +34,9 @@ public class CollisionHandler : MonoBehaviour
         //button but simply dragging it from the Scenes catalog would do the trick as well.
         //I can either provide the index which would allow me to refer to different levels
         //(e.g. '0 + 1') or I can provide the name of the scene as a string.
-        SceneManager.LoadScene(0);
+        // SceneManager.LoadScene(0); OR SceneManager.LoadScene("Sandbox");
+        //I can also trade it for "return whatever number I think the scene's index currently is".
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex; 
+        SceneManager.LoadScene(currentSceneIndex);
     }
 }
