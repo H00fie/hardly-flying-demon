@@ -15,7 +15,7 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("This thing is friendly!");
                 break;
             case "Finish":
-                LoadNextLevel();
+                Invoke("LoadNextLevel", 1f);
                 break;
             case "Soul":
                 Debug.Log("You have harvested a soul!");
