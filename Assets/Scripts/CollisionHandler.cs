@@ -21,12 +21,20 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("You have harvested a soul!");
                 break;
             default:
-            //'Invoke' is a method that allows me to invoke a method after a specified amount of time has passed.
-            //I can use it to give the player a moment to realize they have collided with an unfriendly object
-            //before reloading the level. I need to refer to the invoked method by its name as a string.
-                Invoke("ReloadLevel", 1f);
+                StartCrashSequence();
                 break;
         }    
+    }
+
+    void StartCrashSequence()
+    {
+        //Halikal has the Movement script attached to him. I can reach from here for that component in the Inspector
+        //section in Unity and disable the script atfer the demon has crashed into an unfriendly object.
+        GetComponent<Movement>().enabled = false;
+        //'Invoke' is a method that allows me to invoke a method after a specified amount of time has passed.
+            //I can use it to give the player a moment to realize they have collided with an unfriendly object
+            //before reloading the level. I need to refer to the invoked method by its name as a string.
+        Invoke("ReloadLevel", 1f);
     }
 
     void ReloadLevel()
