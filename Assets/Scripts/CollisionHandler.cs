@@ -19,9 +19,6 @@ public class CollisionHandler : MonoBehaviour
             case "Finish":
                 StartSuccessSequence();
                 break;
-            case "Soul":
-                Debug.Log("You have harvested a soul!");
-                break;
             default:
                 StartCrashSequence();
                 break;
