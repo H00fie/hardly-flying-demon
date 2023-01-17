@@ -15,7 +15,7 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("This thing is friendly!");
                 break;
             case "Finish":
-                Debug.Log("You have finished the game!");
+                LoadNextLevel();
                 break;
             case "Soul":
                 Debug.Log("You have harvested a soul!");
@@ -38,5 +38,17 @@ public class CollisionHandler : MonoBehaviour
         //I can also trade it for "return whatever number I think the scene's index currently is".
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex; 
         SceneManager.LoadScene(currentSceneIndex);
+    }
+
+    void LoadNextLevel()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        //If the next scene's index is the same as the total number of the scenes that I have,
+        //then I want to go back to the beginning.
+        if(nextSceneIndex == SceneManager.sceneCountInBuildSettings)
+        {
+            nextSceneIndex = 0;
+        }
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }
