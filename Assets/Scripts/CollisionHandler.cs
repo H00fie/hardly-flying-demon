@@ -7,9 +7,30 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float levelLoadDelay = 1f;
+    [SerializeField] AudioClip cheer;
+    [SerializeField] AudioClip bump;
+
+    AudioSource audioSource;
+
+    //If Halikal crashed into an unfriendly object and then, due to momentum, reached the exit,
+    //I want only the crash's sequence to be triggered, so Halikal needs to enter a "dead zone"
+    //for the duration of the time between the crash and the resolving of that collision (I added
+    //a short while of delay there!).
+    bool isTransitioning = false;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     void OnCollisionStay(Collision other) 
     {
+        //Halikal is to react with the world only if he's currently not in the process of advancing to the next level
+        //or starting the current one anew.
+        //I could wrap the entire 'switch' with that 'if' statement, but I can simply return from this method, if
+        //Halikal is currently transitioning instead.
+        if(isTransitioning) { return; }
+
         //To decide what object has Halikal bumped into, decided by objects' tags.
         switch (other.gameObject.tag)
         {
@@ -22,11 +43,18 @@ public class CollisionHandler : MonoBehaviour
             default:
                 StartCrashSequence();
                 break;
-        }    
+        }
     }
 
     void StartSuccessSequence()
     {
+        //I do not need to change my state variable back to its default because whether Halikal succeeds or crashes,
+        //I am reloading a level and that automatically reloads the state back to the original state of the class.
+        isTransitioning = true;
+        //The below stops other sounds from playing when the sequence has started. The thrusting will now longer
+        //generate the sound.
+        audioSource.Stop();
+        audioSource.PlayOneShot(cheer);
         //If the exit is reached, stop moving, and load the next level after a second.
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", 1f);
@@ -34,6 +62,9 @@ public class CollisionHandler : MonoBehaviour
 
     void StartCrashSequence()
     {
+        isTransitioning = true;
+        audioSource.Stop();
+        audioSource.PlayOneShot(bump);
         //Halikal has the Movement script attached to him. I can reach from here for that component in the Inspector
         //section in Unity and disable the script atfer the demon has crashed into an unfriendly object.
         GetComponent<Movement>().enabled = false;

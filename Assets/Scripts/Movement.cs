@@ -5,14 +5,23 @@ using UnityEngine;
 //'Monobehaviour' is inherited by 'Movement'.
 public class Movement : MonoBehaviour
 {
+    //Below are PARAMETERS - they are for tuning and are typically set in the editor (things with the [SerializeField]).
+    //How much I want to change how much force is being applied every frame to the upward movement.
+    [SerializeField] float mainThrust = 100f;
+    //And for the rotation movement.
+    [SerializeField] float rotationThrust = 1f;
+    //Different audio clips for various events.
+    [SerializeField] AudioClip thrusting;
+
+    //Below are things I want to CACHE - references for readability or speed. I am actually getting the compontent in
+    //the .Start().
     //To store the rigidbody of my demon.
     Rigidbody rb;
     //To store the audio source for my demon.
     AudioSource audioSource;
-    //To cache by how much I want to change how much force is being applied every frame to the upward movement.
-    [SerializeField] float mainThrust = 100f;
-    //And for the rotation movement.
-    [SerializeField] float rotationThrust = 1f;
+    
+    //Below would come any variables that have something to do with STATE. If I had any.
+    //E.g. 'bool isAlive;' <--- about Halikal.
 
     // Start is called before the first frame update
     void Start()
@@ -40,11 +49,17 @@ public class Movement : MonoBehaviour
             //the dafult value of force applied. 'Time.deltaTime' is to make it framerate independent.
             rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime * 10);
             //The value is additionally multiplied because there was no movement without it.
-            //Since there is only one audio source on my component and there is only one clip on that audio source, I don't need
+            //If there was only one audio source on my component and there was only one clip on that audio source, I wouldn't need
             //to specify what the clip is. The 'if' ensures that the clip be only played once at a time, without it, it would be
             //triggered multiple times and they would overlap.
             if(!audioSource.isPlaying){
-                audioSource.Play();
+                //The .PlayOneShot() is a different method than .Play() because it allows for a parameter to be passed in. Due to
+                //that, I can specify what clip exactly I want played.
+                audioSource.PlayOneShot(thrusting);
+                //Below is the sole line of this 'if' statement when there was only one audio clip available. The .Play() didn't
+                //allow for any parameters to be passed in so it was good when there was a single clip available. It was simply
+                //inferred what's it supposed to play since there was only one option.
+                // audioSource.Play();
             }
         } else {
             //If the 'space' is not pressed, don't play the audio.
