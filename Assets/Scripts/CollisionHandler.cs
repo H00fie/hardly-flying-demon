@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    [SerializeField] float levelLoadDelay = 1f;
+
     void OnCollisionStay(Collision other) 
     {
         //To decide what object has Halikal bumped into, decided by objects' tags.
@@ -15,7 +17,7 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("This thing is friendly!");
                 break;
             case "Finish":
-                Invoke("LoadNextLevel", 1f);
+                StartSuccessSequence();
                 break;
             case "Soul":
                 Debug.Log("You have harvested a soul!");
@@ -26,6 +28,13 @@ public class CollisionHandler : MonoBehaviour
         }    
     }
 
+    void StartSuccessSequence()
+    {
+        //If the exit is reached, stop moving, and load the next level after a second.
+        GetComponent<Movement>().enabled = false;
+        Invoke("LoadNextLevel", 1f);
+    }
+
     void StartCrashSequence()
     {
         //Halikal has the Movement script attached to him. I can reach from here for that component in the Inspector
@@ -34,7 +43,7 @@ public class CollisionHandler : MonoBehaviour
         //'Invoke' is a method that allows me to invoke a method after a specified amount of time has passed.
             //I can use it to give the player a moment to realize they have collided with an unfriendly object
             //before reloading the level. I need to refer to the invoked method by its name as a string.
-        Invoke("ReloadLevel", 1f);
+        Invoke("ReloadLevel", levelLoadDelay);
     }
 
     void ReloadLevel()
