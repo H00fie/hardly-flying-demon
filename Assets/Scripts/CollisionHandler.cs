@@ -9,6 +9,12 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] float levelLoadDelay = 1f;
     [SerializeField] AudioClip cheer;
     [SerializeField] AudioClip bump;
+    //Particles to be used upon completing the level successfully or bumping into an obstacle. The
+    //respective audio clips have been added within Unity - both particle effects are part of Halikal's
+    //prefab and they've been dragged from the game objects' window straight to the fields in the Inspector's
+    //component of this script.
+    [SerializeField] ParticleSystem cheerParticles;
+    [SerializeField] ParticleSystem bumpParticles;
 
     AudioSource audioSource;
 
@@ -55,6 +61,7 @@ public class CollisionHandler : MonoBehaviour
         //generate the sound.
         audioSource.Stop();
         audioSource.PlayOneShot(cheer);
+        cheerParticles.Play();
         //If the exit is reached, stop moving, and load the next level after a second.
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", 1f);
@@ -65,6 +72,7 @@ public class CollisionHandler : MonoBehaviour
         isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(bump);
+        bumpParticles.Play();
         //Halikal has the Movement script attached to him. I can reach from here for that component in the Inspector
         //section in Unity and disable the script atfer the demon has crashed into an unfriendly object.
         GetComponent<Movement>().enabled = false;
