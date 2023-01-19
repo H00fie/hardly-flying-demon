@@ -12,6 +12,8 @@ public class Movement : MonoBehaviour
     [SerializeField] float rotationThrust = 1f;
     //Different audio clips for various events.
     [SerializeField] AudioClip thrusting;
+    //I will need to drag and drop my chosen particle system into this variable's box in Unity!
+    [SerializeField] ParticleSystem darkMagicParticles;
 
     //Below are things I want to CACHE - references for readability or speed. I am actually getting the compontent in
     //the .Start().
@@ -61,9 +63,15 @@ public class Movement : MonoBehaviour
                 //inferred what's it supposed to play since there was only one option.
                 // audioSource.Play();
             }
+            if(!darkMagicParticles.isPlaying){
+                //When the space is pressed, emit the particles.
+                darkMagicParticles.Play();
+            }
         } else {
             //If the 'space' is not pressed, don't play the audio.
             audioSource.Stop();
+            //... and stop emitting the particles!
+            darkMagicParticles.Stop();
         }
     }
 
