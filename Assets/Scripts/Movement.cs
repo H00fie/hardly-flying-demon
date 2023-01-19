@@ -14,6 +14,8 @@ public class Movement : MonoBehaviour
     [SerializeField] AudioClip thrusting;
     //I will need to drag and drop my chosen particle system into this variable's box in Unity!
     [SerializeField] ParticleSystem darkMagicParticles;
+    [SerializeField] ParticleSystem leftHandParticles;
+    [SerializeField] ParticleSystem rightHandParticles;
 
     //Below are things I want to CACHE - references for readability or speed. I am actually getting the compontent in
     //the .Start().
@@ -76,11 +78,29 @@ public class Movement : MonoBehaviour
     }
 
     void ProcessRotation(){
-        if(Input.GetKey(KeyCode.A)){
+        if(Input.GetKey(KeyCode.A))
+        {
             ApplyRotation(rotationThrust);
-        } else if(Input.GetKey(KeyCode.D)){
+            //When the rotation happens - emit particles from the proper hand.
+            if(!rightHandParticles.isPlaying)
+            {               
+                rightHandParticles.Play();
+            }
+        } 
+        else if(Input.GetKey(KeyCode.D))
+        {
             //The other direction is basically the same, but negative.
             ApplyRotation(-rotationThrust);
+            if(!leftHandParticles.isPlaying)
+            {               
+                leftHandParticles.Play();
+            }
+        }
+        //
+        else
+        {
+            rightHandParticles.Stop();
+            leftHandParticles.Stop();
         }
     }
 
@@ -89,7 +109,7 @@ public class Movement : MonoBehaviour
         //The physics system in Unity reacts with objects on impact which can cause conflicts with player controlled movement. In
         //practice it can make my demon fail to react to player's commands when bumping into other game objects. In order to
         //prevent it, I need to freeze the physics system rotation. The mechanism below will prevent the physics system from
-        //having on impact on my demon if it's being issued a command to rotate.
+        //having an impact on my demon if it's being issued a command to rotate.
         rb.freezeRotation = true;
         //I am reaching for the object's 'transform' property within Unity. The object is whatever the script is assigned to.
         //'Vector3.forward' means '0, 0, 1'.
