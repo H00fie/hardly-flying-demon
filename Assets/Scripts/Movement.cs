@@ -43,65 +43,95 @@ public class Movement : MonoBehaviour
         ProcessRotation();
     }
 
-    void ProcessThrust(){
+    void ProcessThrust()
+    {
         //If I push the spacebar...
-        if(Input.GetKey(KeyCode.Space)){
-            //...add the force to the rigidbody relative to its current coordinates. 'Vector3' is three values (x, y and z).
-            //In a 2D game it would be 'Vector3'. A vector is both direction and magnitude. Ssays in what direction and at what
-            //speed a thing is going.
-            //'Vector3' is the same as saying '1, 1, 1', e.g. 'Vector3.up' means '0, 1, 0'. 'mainThrust' is there so I can change
-            //the dafult value of force applied. 'Time.deltaTime' is to make it framerate independent.
-            rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime * 10);
-            //The value is additionally multiplied because there was no movement without it.
-            //If there was only one audio source on my component and there was only one clip on that audio source, I wouldn't need
-            //to specify what the clip is. The 'if' ensures that the clip be only played once at a time, without it, it would be
-            //triggered multiple times and they would overlap.
-            if(!audioSource.isPlaying){
-                //The .PlayOneShot() is a different method than .Play() because it allows for a parameter to be passed in. Due to
-                //that, I can specify what clip exactly I want played.
-                audioSource.PlayOneShot(thrusting);
-                //Below is the sole line of this 'if' statement when there was only one audio clip available. The .Play() didn't
-                //allow for any parameters to be passed in so it was good when there was a single clip available. It was simply
-                //inferred what's it supposed to play since there was only one option.
-                // audioSource.Play();
-            }
-            if(!darkMagicParticles.isPlaying){
-                //When the space is pressed, emit the particles.
-                darkMagicParticles.Play();
-            }
-        } else {
-            //If the 'space' is not pressed, don't play the audio.
-            audioSource.Stop();
-            //... and stop emitting the particles!
-            darkMagicParticles.Stop();
+        if(Input.GetKey(KeyCode.Space))
+        {
+            StartThrusting();
+        } 
+        else 
+        {
+            StopThrusting();
         }
     }
 
     void ProcessRotation(){
         if(Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(rotationThrust);
-            //When the rotation happens - emit particles from the proper hand.
-            if(!rightHandParticles.isPlaying)
-            {               
-                rightHandParticles.Play();
-            }
+            RotateLeft();
         } 
         else if(Input.GetKey(KeyCode.D))
         {
-            //The other direction is basically the same, but negative.
-            ApplyRotation(-rotationThrust);
-            if(!leftHandParticles.isPlaying)
-            {               
-                leftHandParticles.Play();
-            }
+            RotateRight();
         }
-        //
         else
         {
-            rightHandParticles.Stop();
-            leftHandParticles.Stop();
+            StopRotating();
         }
+    }
+
+    void StartThrusting()
+    {
+        //...add the force to the rigidbody relative to its current coordinates. 'Vector3' is three values (x, y and z).
+        //In a 2D game it would be 'Vector3'. A vector is both direction and magnitude. Ssays in what direction and at what
+        //speed a thing is going.
+        //'Vector3' is the same as saying '1, 1, 1', e.g. 'Vector3.up' means '0, 1, 0'. 'mainThrust' is there so I can change
+        //the dafult value of force applied. 'Time.deltaTime' is to make it framerate independent.
+        rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime * 10);
+        //The value is additionally multiplied because there was no movement without it.
+        //If there was only one audio source on my component and there was only one clip on that audio source, I wouldn't need
+        //to specify what the clip is. The 'if' ensures that the clip be only played once at a time, without it, it would be
+        //triggered multiple times and they would overlap.
+        if(!audioSource.isPlaying)
+        {
+            //The .PlayOneShot() is a different method than .Play() because it allows for a parameter to be passed in. Due to
+            //that, I can specify what clip exactly I want played.
+            audioSource.PlayOneShot(thrusting);
+            //Below is the sole line of this 'if' statement when there was only one audio clip available. The .Play() didn't
+            //allow for any parameters to be passed in so it was good when there was a single clip available. It was simply
+            //inferred what's it supposed to play since there was only one option.
+            // audioSource.Play();
+        }
+        if(!darkMagicParticles.isPlaying)
+        {
+            //When the space is pressed, emit the particles.
+            darkMagicParticles.Play();
+        }
+    }
+
+    void StopThrusting()
+    {
+        //If the 'space' is not pressed, don't play the audio.
+        audioSource.Stop();
+        //... and stop emitting the particles!
+        darkMagicParticles.Stop();
+    }
+
+    void RotateLeft()
+    {
+        ApplyRotation(rotationThrust);
+        //When the rotation happens - emit particles from the proper hand.
+        if(!rightHandParticles.isPlaying)
+        {               
+            rightHandParticles.Play();
+        }
+    }
+
+    void RotateRight()
+    {
+        //The other direction is basically the same, but negative.
+        ApplyRotation(-rotationThrust);
+        if(!leftHandParticles.isPlaying)
+        {               
+            leftHandParticles.Play();
+        }
+    }
+
+    void StopRotating()
+    {
+        rightHandParticles.Stop();
+        leftHandParticles.Stop();
     }
 
     //In C# all methods are private by default.
