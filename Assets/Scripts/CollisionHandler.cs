@@ -23,6 +23,8 @@ public class CollisionHandler : MonoBehaviour
     //for the duration of the time between the crash and the resolving of that collision (I added
     //a short while of delay there!).
     bool isTransitioning = false;
+    //To be able to turn the collision on and off for debugging purposes.
+    bool collisionDisabled = false;
 
     void Start()
     {
@@ -36,20 +38,29 @@ public class CollisionHandler : MonoBehaviour
 
     void RespondToDebugKeys()
     {
-        //.GetKeyDown() is when the button is pressed.
+        //.GetKeyDown() is when the button is pressed. A 'cheat' key for debugging purposes.
         if(Input.GetKeyDown(KeyCode.L))
         {
             LoadNextLevel();
+        }
+        //To toggle off and on the collision for debugging purposes. I need a boolean variable for it.
+        //The mechanism used below is a standard way of toggling a functionality. Essentially, pressing 'C'
+        //will switch the value of the variable between true and false.
+        else if(Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled;
         }
     }
 
     void OnCollisionStay(Collision other) 
     {
         //Halikal is to react with the world only if he's currently not in the process of advancing to the next level
-        //or starting the current one anew.
+        //or starting the current one anew. The reacting with the world should also be switched off if I toggled the
+        //collision off with the 'C' key for debugging purposes.
         //I could wrap the entire 'switch' with that 'if' statement, but I can simply return from this method, if
-        //Halikal is currently transitioning instead.
-        if(isTransitioning) { return; }
+        //Halikal is currently transitioning or 'C' is pressed instead.
+        if(isTransitioning || collisionDisabled) { return; }
+
 
         //To decide what object has Halikal bumped into, decided by objects' tags.
         switch (other.gameObject.tag)
