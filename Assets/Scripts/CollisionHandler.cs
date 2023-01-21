@@ -29,6 +29,20 @@ public class CollisionHandler : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update() 
+    {
+        RespondToDebugKeys();    
+    }
+
+    void RespondToDebugKeys()
+    {
+        //.GetKeyDown() is when the button is pressed.
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+    }
+
     void OnCollisionStay(Collision other) 
     {
         //Halikal is to react with the world only if he's currently not in the process of advancing to the next level

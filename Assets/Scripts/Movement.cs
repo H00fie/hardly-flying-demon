@@ -147,4 +147,5 @@ public class Movement : MonoBehaviour
         //The value is additionally multiplied because there was no movement without it.
         rb.freezeRotation = false;
     }
+
 }
