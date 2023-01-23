@@ -13,6 +13,7 @@ Controls:
 Space - fly
 A - rotate left
 D - rotate right
+
 ---
 
 The game can be played at https://simmer.io/@Hoofie/hardly-flying-demon
