@@ -31,6 +31,12 @@ public class Oscilator : MonoBehaviour
         //I get is called a radian) and count how many times it fits around the circle - I get the tau. It's
         //about 6.28. It's essentially PI * 2. 
         const float tau = Mathf.PI * 2;
+        //If 'period' is ever zero, I will get a 'NaN error' as it's impossible to divide by zero. There is a
+        //problem when comparing two floats since they can vary by a tiny amount (due to all the decimal places).
+        //Using '==' is unpredictabe and I always should specify the acceptable difference. The smallest float
+        //I have access to is 'Mathf.Epsilon' - it's better to compare to it rather than comparing to zero.
+        //if(period == 0) { return; }
+        if(period == Mathf.Epsilon) { return; }
         //The cycle of movement (back and forth) for a floating object equals how much time has elapsed divided
         //by my custom variable.
         float cycles = Time.time / period;
