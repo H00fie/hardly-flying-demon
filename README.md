@@ -9,7 +9,7 @@ His situation is particularly tricky as flying has never been his strongest suit
 
 ---
 
-Controls:<br>
+# Controls:<br>
 Space - fly<br>
 A - rotate left<br>
 D - rotate right<br>
