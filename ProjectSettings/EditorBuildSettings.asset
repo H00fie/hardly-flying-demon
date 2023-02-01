@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/The Deepest Level.unity
+    path: Assets/Scenes/First Level.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Almost The Deepest.unity
+    path: Assets/Scenes/Second Level.unity
     guid: 7bca831354b700246907b121a877ac0e
   m_configObjects: {}
